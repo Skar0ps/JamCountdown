@@ -1,23 +1,64 @@
 @tool
 extends Control
 
+## Emitted when the countdown timer starts.
+signal countdown_started
+
+## Emitted each time the countdown timer is updated (every second).
+signal countdown_updated
+
+## Emitted when the countdown timer finishes.
+signal countdown_finished
+
 const SETTINGS_PREFIX := "jam_countdown/"
+
+## Project setting key for checking if custom data exists.
 const SETTING_HAS_DATA := SETTINGS_PREFIX + "has_custom_data"
+
+## Project setting key for the jam title.
 const SETTING_TITLE := SETTINGS_PREFIX + "jam_title"
+
+## Project setting key for the end year.
 const SETTING_YEAR := SETTINGS_PREFIX + "year"
+
+## Project setting key for the end month.
 const SETTING_MONTH := SETTINGS_PREFIX + "month"
+
+## Project setting key for the end day.
 const SETTING_DAY := SETTINGS_PREFIX + "day"
+
+## Project setting key for the end hour.
 const SETTING_HOUR := SETTINGS_PREFIX + "hour"
+
+## Project setting key for the end minute.
 const SETTING_MINUTE := SETTINGS_PREFIX + "minute"
+
+## Project setting key for the jam page URL.
 const SETTING_URL := SETTINGS_PREFIX + "link_to_jam_page"
 
+## The title of the game jam.
 @export var jam_title := "GamejamName"
+## The URL to the game jam's page.
 @export var jam_page_url := "https://itch.io/jam/"
+
+@export_category("End date of the gamejam")
+
+## The year the jam ends.
 @export var year : int = 2025
-@export_range(0.0,12.0,1.0) var month : int = 10
-@export_range(0.0,31.0,1.0) var day : int = 10
-@export_range(0.0,23.0,1.0) var hour : int = 10
-@export_range(0.0,59.0,1.0) var minute : int = 10
+
+## The month the jam ends.
+@export_range(1,12,1) var month : int = 10
+
+## The day the jam ends.
+@export_range(1,31,1) var day : int = 10
+
+## The hour the jam ends.
+@export_range(0,23,1) var hour : int = 10
+
+## The minute the jam ends.
+@export_range(0,59,1) var minute : int = 10
+
+## If `true`, shows time units (e.g., "d", "h", "m", "s").
 @export var show_time_units := true
 
 @onready var title_label : Button = %TitleLabel
@@ -30,6 +71,7 @@ var jam_date_unix : int
 var time_left_unix : int
 var timer : Timer
 
+
 func _ready() -> void:
 	if _has_saved_data():
 		_load_settings()
@@ -37,16 +79,14 @@ func _ready() -> void:
 		_set_default_date()
 	start_countdown()
 
-## Vérifie si des données sauvegardées existent
+## Checks if there is saved countdown data in the project settings.
 func _has_saved_data() -> bool:
-	# MODIFIÉ : Utilisation de la constante
 	return ProjectSettings.has_setting(SETTING_HAS_DATA) and ProjectSettings.get_setting(SETTING_HAS_DATA, false)
 
-## Charge les paramètres depuis ProjectSettings
+## Loads the countdown settings from the project settings.
 func _load_settings() -> void:
 	var current_date : Dictionary = Time.get_datetime_dict_from_system()
 	
-	# MODIFIÉ : Utilisation des constantes
 	jam_title = ProjectSettings.get_setting(SETTING_TITLE, "GamejamName")
 	year = ProjectSettings.get_setting(SETTING_YEAR, current_date.year)
 	month = ProjectSettings.get_setting(SETTING_MONTH, current_date.month)
@@ -65,10 +105,10 @@ func _load_settings() -> void:
 	else:
 		link_box.hide()
 
-## Configure la date par défaut à une semaine dans le futur
+## Sets a default end date for the countdown (7 days from now).
+## Used when no custom data is saved.
 func _set_default_date() -> void:
 	var current_date = Time.get_datetime_dict_from_system()
-	# Seven days from when the plugin was initialized
 	var future_unix = Time.get_unix_time_from_datetime_dict(current_date) + (7 * 24 * 60 * 60)
 	var future_date = Time.get_datetime_dict_from_unix_time(future_unix)
 	
@@ -79,6 +119,8 @@ func _set_default_date() -> void:
 	hour = future_date.hour
 	minute = future_date.minute
 
+## Initializes and starts the countdown timer.
+## Sets up the end date dictionary and updates the UI.
 func start_countdown() -> void:
 	jam_end_date = {
 		"year": year,
@@ -89,7 +131,7 @@ func start_countdown() -> void:
 		"second": 0
 	}
 	title_label.text = jam_title
-	countdown_label.text = "??????"
+	countdown_label.text = ""
 	countdown_label.visible = true
 	var editor_theme = EditorInterface.get_editor_theme()
 	var accent_color = editor_theme.get_color("accent_color", "Editor")
@@ -97,16 +139,19 @@ func start_countdown() -> void:
 	title_label.add_theme_color_override("font_color",accent_color)
 	
 	initialize_countdown()
+	emit_signal("countdown_started")
 
+## Creates and configures the [Timer] node for the countdown.
+## The timer is synchronized with the system clock to ensure it ticks every second accurately.
 func create_timer() -> void:
 	if not is_instance_valid(timer):
 		timer = Timer.new()
 		add_child(timer)
-		timer.connect("timeout",Callable(self,"_on_Timer_timeout"))
-	timer.process_mode = 0
-	timer.set_one_shot(false)
+		timer.connect("timeout",_on_Timer_timeout)
+	timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	timer.one_shot = false
 	
-	# Sync with system clock
+	# Sync with system clock to start the timer at the beginning of a second.
 	var system_time_ms = Time.get_unix_time_from_system() * 1000
 	var str_millis = str(system_time_ms)
 	var wait_time = (1000-int(str_millis.substr(str_millis.length()-3,str_millis.length()-1)))/1000.0
@@ -118,12 +163,14 @@ func create_timer() -> void:
 func _on_Timer_timeout() -> void:
 	if not is_instance_valid(timer):
 		return
-	timer.set_wait_time(1)
+	timer.wait_time = 1
 	update_countdown()
 
 func _on_jam_link_button_pressed() -> void:
 	OS.shell_open(ProjectSettings.get_setting("jam_countdown/link_to_jam_page", "https://itch.io/jam/"))
 
+## Sets up the initial state of the countdown.
+## Calculates the initial time remaining and starts the timer.
 func initialize_countdown() -> void:
 	jam_date_unix = Time.get_unix_time_from_datetime_dict(jam_end_date)
 	var current_time_unix = Time.get_unix_time_from_datetime_dict(Time.get_datetime_dict_from_system())
@@ -131,23 +178,30 @@ func initialize_countdown() -> void:
 	time_left_unix = jam_date_unix - current_time_unix
 	if time_left_unix <= 0:
 		countdown_label.text = "Ended !"
+		emit_signal("countdown_finished")
 		return
 	update_countdown_label_text()
 	create_timer()
 
+## Updates the countdown every second.
+## Stops the timer if the end date is reached.
 func update_countdown() -> void:
 	var current_time_unix = Time.get_unix_time_from_datetime_dict(Time.get_datetime_dict_from_system())
 	time_left_unix = jam_date_unix - current_time_unix
 	
 	if time_left_unix <= 0:
-		countdown_label.visible = false
-		if timer: timer.queue_free()
+		countdown_label.text = "Ended !"
+		countdown_label.visible = true
+		if is_instance_valid(timer): timer.queue_free()
+		emit_signal("countdown_finished")
 		return
 	
 	update_countdown_label_text()
+	emit_signal("countdown_updated")
 
+## Formats and displays the remaining time. [br]
+## The format depends on the [member show_time_units] property.
 func update_countdown_label_text() -> void:
-	
 	var time_left = get_datetime_from_unix(time_left_unix)
 	
 	var str_days
@@ -168,11 +222,13 @@ func update_countdown_label_text() -> void:
 		
 	countdown_label.text = str_days + str_hours + str_minutes + str_seconds
 
-func get_datetime_from_unix(unix) -> Dictionary:
-	var seconds = floor(unix%60)
-	var minutes = floor((unix/60)%60)
-	var hours   = floor((unix/3600)%24)
-	var days    = floor(unix/86400)
+## Converts a Unix timestamp into a dictionary of days, hours, minutes, and seconds. [br]
+## Returns a dictionary with "day", "hour", "minute", and "second" keys.
+func get_datetime_from_unix(unix_timestamp: int) -> Dictionary:
+	var seconds = floor(unix_timestamp % 60)
+	var minutes = floor((unix_timestamp / 60) % 60)
+	var hours   = floor((unix_timestamp / 3600) % 24)
+	var days    = floor(unix_timestamp / 86400)
 	
 	var time = {
 		"day": days,

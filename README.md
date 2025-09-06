@@ -4,14 +4,14 @@ A simple countdown timer for game jams, displayed directly in the Godot editor t
 
 ## Features
 
-- Displays a real-time countdown in the main editor toolbar.
-- Click on the jam title to open a configuration panel.
-- Set the jam's title, end date, and end time.
-- Add an optional link to the jam page, accessible via a small icon.
-- Settings are saved per-project.
+- Display a real-time countdown timer directly in the editor toolbar.
+- Configure the jam's title, end date, and time via a simple pop-up panel.
+- Add an optional URL to the jam page for quick access.
+- Open the configuration panel by clicking on the countdown text.
+- Save countdown settings individually for each project.
 
-![Screenshot of the countdown timer in the Godot editor toolbar.](screenshots/image1.png)
-![Screenshot of the configuration panel for the countdown timer.](screenshots/image2.png)
+![Screenshot of the countdown timer in the Godot editor toolbar.](screenshots/countdown_in_toolbar.png)
+![Screenshot of the configuration panel for the countdown timer.](screenshots/config_panel.png)
 
 ## Installation
 

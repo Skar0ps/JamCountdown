@@ -15,19 +15,19 @@ default_font = ExtResource("1_5fue1")
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -174.0
-offset_right = 23.0
-offset_bottom = 22.0
+offset_left = -272.0
+offset_bottom = 28.0
 grow_horizontal = 0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme = SubResource("Theme_ws1c5")
 script = ExtResource("1_n7ugf")
 jam_title = "DINOJAM 5"
+jam_page_url = "https://itch.io/jam/dinojam5"
 month = 9
-day = 6
-hour = 23
-minute = 59
+day = 22
+hour = 17
+minute = 0
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
@@ -39,7 +39,6 @@ theme_override_constants/separation = 0
 
 [node name="LinkBox" type="HBoxContainer" parent="Countdown"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 
@@ -69,14 +68,13 @@ layout_mode = 2
 
 [node name="CountdownLabel" type="Label" parent="Countdown"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
-tooltip_text = "06/09/25 23:59"
+tooltip_text = "22/09/25 17:00"
 mouse_filter = 0
 mouse_default_cursor_shape = 16
 theme_override_fonts/font = ExtResource("3_5fue1")
 theme_override_font_sizes/font_size = 16
-text = "00m 01s"
+text = "15d 15h 31m 05s"
 
 [node name="EditPanel" type="ConfirmationDialog" parent="."]
 title = "Configure the game jam countdown"
@@ -118,7 +116,7 @@ text = "Page link :"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "https://itch.io/jam/"
+text = "https://itch.io/jam/dinojam5"
 placeholder_text = "Link to the game jam page"
 
 [node name="Separator" type="HBoxContainer" parent="EditPanel/VBox"]
@@ -140,7 +138,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.588171, 0.545463, 1, 1)
 theme_override_fonts/font = ExtResource("3_5fue1")
-text = "06/09/25 23:59"
+text = "22/09/25 17:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -160,9 +158,9 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-min_value = 6.0
+min_value = 7.0
 max_value = 31.0
-value = 6.0
+value = 22.0
 update_on_text_changed = true
 prefix = "D:"
 
@@ -194,9 +192,8 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-min_value = 23.0
 max_value = 23.0
-value = 23.0
+value = 17.0
 update_on_text_changed = true
 prefix = "Hour:"
 
@@ -204,9 +201,7 @@ prefix = "Hour:"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-min_value = 40.0
 max_value = 59.0
-value = 59.0
 update_on_text_changed = true
 prefix = "Minute:"
 
