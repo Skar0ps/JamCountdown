@@ -1,3 +1,6 @@
-res://addons/jamcountdown/countdown.gd
 res://addons/jamcountdown/jam_countdown.tscn
+res://addons/jamcountdown/countdown_editor.gd
+res://addons/jamcountdown/countdown.gd
 res://addons/jamcountdown/plugin.gd
+res://addons/jamcountdown/plugin.cfg
+res://README.md

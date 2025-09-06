@@ -1,41 +1,214 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsf3w561yokdc"]
+[gd_scene load_steps=8 format=3 uid="uid://dsf3w561yokdc"]
 
-[ext_resource type="FontFile" uid="uid://igxjjp2pwfym" path="res://addons/jamcountdown/Roboto-Bold.ttf" id="1_grmgt"]
-[ext_resource type="Script" path="res://addons/jamcountdown/countdown.gd" id="1_n7ugf"]
+[ext_resource type="FontFile" uid="uid://ck2tdglnsj604" path="res://addons/jamcountdown/fonts/AtkinsonHyperlegibleNext-Regular.ttf" id="1_5fue1"]
+[ext_resource type="Script" uid="uid://c7kkv074krtrw" path="res://addons/jamcountdown/countdown.gd" id="1_n7ugf"]
+[ext_resource type="FontFile" uid="uid://d3g8pb4owhwoa" path="res://addons/jamcountdown/fonts/AtkinsonHyperlegibleMono-Regular.ttf" id="3_5fue1"]
+[ext_resource type="Texture2D" uid="uid://bh410yicf6sp4" path="res://addons/jamcountdown/icons/follow_link.svg" id="3_ws1c5"]
+[ext_resource type="Script" uid="uid://bby5n4budogex" path="res://addons/jamcountdown/countdown_editor.gd" id="4_5fue1"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62q5s"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+[sub_resource type="Theme" id="Theme_ws1c5"]
+default_font = ExtResource("1_5fue1")
 
-[sub_resource type="Theme" id="Theme_hj160"]
-default_font = ExtResource("1_grmgt")
-default_font_size = 14
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_62q5s")
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gf2j7"]
 
-[node name="JamCountdown" type="PanelContainer"]
+[node name="JamCountdown" type="MarginContainer"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -102.0
+offset_left = -174.0
+offset_right = 23.0
 offset_bottom = 22.0
 grow_horizontal = 0
 size_flags_horizontal = 4
-size_flags_vertical = 4
-theme = SubResource("Theme_hj160")
+size_flags_vertical = 3
+theme = SubResource("Theme_ws1c5")
 script = ExtResource("1_n7ugf")
-jam_title = "Gamejam"
-month = 1
-day = 9
-hour = 14
-minute = 0
-show_time_units = false
+jam_title = "DINOJAM 5"
+month = 9
+day = 6
+hour = 23
+minute = 59
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Countdown" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LinkBox" type="HBoxContainer" parent="Countdown"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LinkButton" type="Button" parent="Countdown/LinkBox"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Go to the game jam page"
+mouse_default_cursor_shape = 2
+theme_type_variation = &"FlatButton"
+icon = ExtResource("3_ws1c5")
+
+[node name="VSeparator" type="VSeparator" parent="Countdown/LinkBox"]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="HBoxContainer"]
+[node name="TitleLabel" type="Button" parent="Countdown"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Title"
+tooltip_text = "Configure the game jam countdown"
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.588171, 0.545463, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gf2j7")
+text = "DINOJAM 5"
 
-[node name="CountdownLabel" type="Label" parent="HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="Countdown"]
 layout_mode = 2
-text = "10:00:00"
+
+[node name="CountdownLabel" type="Label" parent="Countdown"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "06/09/25 23:59"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+theme_override_fonts/font = ExtResource("3_5fue1")
+theme_override_font_sizes/font_size = 16
+text = "00m 01s"
+
+[node name="EditPanel" type="ConfirmationDialog" parent="."]
+title = "Configure the game jam countdown"
+initial_position = 4
+size = Vector2i(304, 226)
+script = ExtResource("4_5fue1")
+
+[node name="VBox" type="VBoxContainer" parent="EditPanel"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 296.0
+offset_bottom = 178.0
+theme_override_constants/separation = 8
+
+[node name="TitleBox" type="HBoxContainer" parent="EditPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="EditPanel/VBox/TitleBox"]
+layout_mode = 2
+text = "Title :"
+
+[node name="GamejamTitle" type="LineEdit" parent="EditPanel/VBox/TitleBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DINOJAM 5"
+placeholder_text = "Game jam title"
+
+[node name="LinkBox" type="HBoxContainer" parent="EditPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="EditPanel/VBox/LinkBox"]
+layout_mode = 2
+text = "Page link :"
+
+[node name="JamLink" type="LineEdit" parent="EditPanel/VBox/LinkBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "https://itch.io/jam/"
+placeholder_text = "Link to the game jam page"
+
+[node name="Separator" type="HBoxContainer" parent="EditPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LeftSeparator" type="HSeparator" parent="EditPanel/VBox/Separator"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="EditPanel/VBox/Separator"]
+layout_mode = 2
+text = "End date :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HumanDate" type="Label" parent="EditPanel/VBox/Separator"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.588171, 0.545463, 1, 1)
+theme_override_fonts/font = ExtResource("3_5fue1")
+text = "06/09/25 23:59"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightSeparator" type="HSeparator" parent="EditPanel/VBox/Separator"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EndDate" type="VBoxContainer" parent="EditPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Date" type="HBoxContainer" parent="EditPanel/VBox/EndDate"]
+layout_mode = 2
+alignment = 1
+
+[node name="Day" type="SpinBox" parent="EditPanel/VBox/EndDate/Date"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 6.0
+max_value = 31.0
+value = 6.0
+update_on_text_changed = true
+prefix = "D:"
+
+[node name="Month" type="SpinBox" parent="EditPanel/VBox/EndDate/Date"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 9.0
+max_value = 12.0
+value = 9.0
+update_on_text_changed = true
+prefix = "M:"
+
+[node name="Year" type="SpinBox" parent="EditPanel/VBox/EndDate/Date"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 2025.0
+max_value = 9999.0
+value = 2025.0
+update_on_text_changed = true
+prefix = "Y:"
+
+[node name="Time" type="HBoxContainer" parent="EditPanel/VBox/EndDate"]
+layout_mode = 2
+
+[node name="Hour" type="SpinBox" parent="EditPanel/VBox/EndDate/Time"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 23.0
+max_value = 23.0
+value = 23.0
+update_on_text_changed = true
+prefix = "Hour:"
+
+[node name="Minute" type="SpinBox" parent="EditPanel/VBox/EndDate/Time"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 40.0
+max_value = 59.0
+value = 59.0
+update_on_text_changed = true
+prefix = "Minute:"
+
+[connection signal="pressed" from="Countdown/TitleLabel" to="EditPanel" method="edit" flags=3]
+[connection signal="confirmed" from="EditPanel" to="EditPanel" method="_on_confirmed"]

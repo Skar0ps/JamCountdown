@@ -11,12 +11,23 @@ config_version=5
 [application]
 
 config/name="JamCountdown"
-config/features=PackedStringArray("4.0")
-config/icon="res://icon.png"
+config/features=PackedStringArray("4.4")
+config/icon="uid://bl150inroddcw"
 
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/jamcountdown/plugin.cfg")
+
+[jam_countdown]
+
+jam_title="DINOJAM 5"
+year=2025
+month=9
+day=22
+hour=17
+minute=0
+has_custom_data=true
+link_to_jam_page="https://itch.io/jam/dinojam5"
 
 [physics]
 
