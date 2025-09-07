@@ -74,7 +74,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 16
 theme_override_fonts/font = ExtResource("3_5fue1")
 theme_override_font_sizes/font_size = 16
-text = "15d 15h 31m 05s"
+text = "15d 01h 13m 30s"
 
 [node name="EditPanel" type="ConfirmationDialog" parent="."]
 title = "Configure the game jam countdown"
@@ -204,6 +204,3 @@ size_flags_horizontal = 3
 max_value = 59.0
 update_on_text_changed = true
 prefix = "Minute:"
-
-[connection signal="pressed" from="Countdown/TitleLabel" to="EditPanel" method="edit" flags=3]
-[connection signal="confirmed" from="EditPanel" to="EditPanel" method="_on_confirmed"]

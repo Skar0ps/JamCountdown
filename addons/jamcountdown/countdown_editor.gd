@@ -16,6 +16,7 @@ extends ConfirmationDialog
 @onready var jam_link: LineEdit = %JamLink
 @onready var link_box: HBoxContainer = %LinkBox
 @onready var countdown_label: Label = %CountdownLabel
+@onready var title_label: Button = %TitleLabel
 
 var current_date: Dictionary
 
@@ -28,16 +29,22 @@ func _ready() -> void:
 	
 	current_date = Time.get_datetime_dict_from_system()
 	
+	if !title_label.pressed.is_connected(_enter_edit_mode):
+		title_label.pressed.connect(_enter_edit_mode,CONNECT_DEFERRED)
+	
+	if not confirmed.is_connected(_on_confirmed):
+		confirmed.connect(_on_confirmed)
+	
 	# Connect signals only if they are not already connected.
-	if not day.is_connected("value_changed", _on_date_value_changed):
+	if not day.value_changed.is_connected(_on_date_value_changed):
 		day.value_changed.connect(_on_date_value_changed)
-	if not month.is_connected("value_changed", _on_date_value_changed):
+	if not month.value_changed.is_connected(_on_date_value_changed):
 		month.value_changed.connect(_on_date_value_changed)
-	if not year.is_connected("value_changed", _on_date_value_changed):
+	if not year.value_changed.is_connected(_on_date_value_changed):
 		year.value_changed.connect(_on_date_value_changed)
-	if not hour.is_connected("value_changed", _on_date_value_changed):
+	if not hour.value_changed.is_connected(_on_date_value_changed):
 		hour.value_changed.connect(_on_date_value_changed)
-	if not minute.is_connected("value_changed", _on_date_value_changed):
+	if not minute.value_changed.is_connected(_on_date_value_changed):
 		minute.value_changed.connect(_on_date_value_changed)
 
 
@@ -86,7 +93,7 @@ func _update_values() -> void:
 	_update_human_date()
 
 ## Opens the dialog to edit the countdown settings.
-func edit() -> void:
+func _enter_edit_mode() -> void:
 	_update_values()
 	popup_centered()
 

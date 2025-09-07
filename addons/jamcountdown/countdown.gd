@@ -78,6 +78,7 @@ func _ready() -> void:
 	elif Engine.is_editor_hint():
 		_set_default_date()
 	start_countdown()
+	
 
 ## Checks if there is saved countdown data in the project settings.
 func _has_saved_data() -> bool:
