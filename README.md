@@ -1,5 +1,8 @@
 # Jam Countdown Plugin for Godot
 
+[![Godot Version](https://img.shields.io/badge/Godot-4.x-blue?style=for-the-badge&logo=godot-engine)](https://godotengine.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
 A simple countdown timer for game jams, displayed directly in the Godot editor toolbar.
 
 ## Features
